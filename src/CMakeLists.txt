@@ -2,4 +2,13 @@ cmake_minimum_required(VERSION 3.10)
 
 project(mill-emulation)
 
-add_executable(mill-emulation main.cpp)
+set(PROJECT_HEADER
+    board.h
+    tests.h)
+
+set(PROJECT_SOURCE
+    main.cpp
+    board.cpp
+    tests.cpp)
+
+add_executable(mill-emulation ${PROJECT_SOURCE})
