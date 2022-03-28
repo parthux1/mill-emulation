@@ -55,13 +55,13 @@ bool Board::pos_is_mill(Position pos) const
     const unsigned char next = (pos.rel_pos+1)%8;
     const unsigned char nextnext = (pos.rel_pos+2)%8;
 
-    if(positions[pos.ring*8+next].occupation == positions[pos.ring*8+nextnext].occupation == positions[array_index].occupation) return true;
+    if(positions[(pos.ring*8)+next].occupation == positions[(pos.ring*8)+nextnext].occupation == positions[array_index].occupation) return true;
     
     // check 2 . next 2 lesser values
     const unsigned char prev = (pos.rel_pos-1)%8;
     const unsigned char prevprev = (pos.rel_pos-2)%8;
 
-    return (positions[pos.ring*8+prev].occupation == positions[pos.ring*8+prevprev].occupation == positions[array_index].occupation);
+    return (positions[(pos.ring*8)+prev].occupation == positions[(pos.ring*8)+prevprev].occupation == positions[array_index].occupation);
 }
 
 
