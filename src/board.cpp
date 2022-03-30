@@ -1,5 +1,27 @@
 #include "board.h"
 
+//////////////////////////
+// Position Constructors /
+//////////////////////////
+
+Position::Position()
+{
+    ring = 0;
+    rel_pos = 0;
+    occupation = 0;
+    last_moved = 0;
+}
+
+Position::Position(unsigned char ring, unsigned char rel_pos, unsigned char occupation, unsigned char last_moved)
+    : ring(ring), rel_pos(rel_pos), occupation(occupation), last_moved(last_moved)
+{
+    
+}
+
+//////////
+// Board /
+//////////
+
 Board::Board()
 {
     positions = Board::get_new_position_array();
@@ -28,36 +50,58 @@ bool Board::pos_is_mill(Position pos) const
     if(!pos.occupation) return false;
 
     // calculate the position of this piece in the array
-    const unsigned char array_index = pos.ring*8+pos.rel_pos;
-    
+    const unsigned char array_index = get_array_pos(pos);
+
+    // the value we check against
+    const unsigned char compare_occ = positions[array_index].occupation;   
 
     // (1)
     if(pos.rel_pos % 2 == 1)
     {
+
         // check 1 - in the array the pieces are 8 apart
-        if(positions[pos.rel_pos].occupation == positions[pos.rel_pos+8].occupation == positions[pos.rel_pos+16].occupation) return true;
+        if(compare_occ == positions[pos.rel_pos+8].occupation && compare_occ ==  positions[pos.rel_pos+16].occupation) return true;
 
         // check 2 - one below, one above
-        return (positions[array_index-1].occupation == positions[array_index+1].occupation == pos.occupation);
+        // this won't be oob, because the value is odd.
+        //TODO in (2) check1 & 2 we navigate using get_array_pos(). use this here too?
+        return (compare_occ == positions[array_index-1].occupation && compare_occ == positions[array_index+1].occupation);
     }
 
     // (2)
-    // check 1 - next 2 greater values
-    const unsigned char next = (pos.rel_pos+1)%8;
-    const unsigned char nextnext = (pos.rel_pos+2)%8;
-
-    if(positions[(pos.ring*8)+next].occupation == positions[(pos.ring*8)+nextnext].occupation == positions[array_index].occupation) return true;
+    // we use the fact, that each bitfield member has its own overflow-handling
     
-    // check 2 . next 2 lesser values
-    const unsigned char prev = (pos.rel_pos-1)%8;
-    const unsigned char prevprev = (pos.rel_pos-2)%8;
+    // check 1
+    // array-positions of the next 2 values
+    pos.rel_pos +=1;
+    const unsigned char next = get_array_pos(pos);
+    pos.rel_pos += 1;
+    const unsigned char nextnext = get_array_pos(pos);
 
-    return (positions[(pos.ring*8)+prev].occupation == positions[(pos.ring*8)+prevprev].occupation == positions[array_index].occupation);
+    if(compare_occ == positions[next].occupation && compare_occ == positions[nextnext].occupation) return true;
+    
+    // check 2
+    // position of the 2 previous values
+    pos.rel_pos -= 3;
+    const unsigned char prev = get_array_pos(pos);
+    pos.rel_pos -= 1;
+    const unsigned char prevprev = get_array_pos(pos);
+    
+    return (positions[prev].occupation == positions[array_index].occupation && positions[prevprev].occupation == positions[array_index].occupation);
 }
 
-// getter
+///////////
+// getter /
+///////////
 
-inline unsigned char Board::get_array_pos(const Position& pos) const noexcept
+
+std::array<Position, 24> Board::get_array_copy() const noexcept
+{
+    return positions;
+}
+
+//TODO move - this is not a public getter
+inline unsigned char Board::get_array_pos(const Position& pos) noexcept
 {
     return pos.ring*8+pos.rel_pos;
 }
@@ -67,13 +111,27 @@ void Board::get_occupation_at(Position& pos) const noexcept
     pos.occupation = positions[get_array_pos(pos)].occupation;
 }
 
+Position Board::get_last_moved() const noexcept
+{   
+    
+    for(const Position& pos : positions)
+    {
+        if(pos.last_moved) return pos;
+    }
+
+    // return a value with moved=1 and occupation=0
+    const Position pos = {0, 0, 0, 1}; //TODO would 0b1 work?
+    return pos;
+}
+
 std::array<Position, 24> Board::get_new_position_array()
 {
     std::array<Position, 24> ret_array;
 
-    // Init all 24 stones
+    // Init all 24 positions
     Position p_default;
     p_default.occupation = 0;
+    p_default.last_moved = 0;
 
     // Ring iteration
     for(unsigned char i = 0; i < 3; i++)
@@ -91,13 +149,18 @@ std::array<Position, 24> Board::get_new_position_array()
     return ret_array;
 }
 
-// setter
+///////////
+// setter /
+///////////
+
 void Board::set_occupation_at(Position pos) noexcept
 {
     positions[get_array_pos(pos)].occupation = pos.occupation;
 }
 
-// Output functions
+/////////////////////
+// output functions /
+/////////////////////
 
 void Board::print_list()
 {

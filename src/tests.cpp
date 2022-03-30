@@ -5,9 +5,9 @@ bool tests::board_is_legal(const Board& b) noexcept
     return false;
 }
 
-Board tests::random_board(unsigned char min_amount = 0) noexcept
+Board tests::random_board(unsigned char min_amount) noexcept
 {
-    srand(time(NULL));
+    srand(time(0));
 
     // standard board
     std::array<Position, 24> positions = Board::get_new_position_array();
@@ -50,7 +50,7 @@ void tests::mill_detection(unsigned int amount, bool verbose) {
             b.get_occupation_at(pos);
             if(pos.occupation != 0) flag = b.pos_is_mill(pos);
 
-            if(flag && verbose) std::cout << (int)pos.ring << '.' << (int)pos.rel_pos << " is part of a mill\n";
+            if(flag && verbose) std::cout << "Ring<" << (int)pos.ring << ">Rel_Pos<" << (int)pos.rel_pos << "> is part of a mill\n";
         }
     }
 }

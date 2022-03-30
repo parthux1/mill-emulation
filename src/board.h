@@ -22,12 +22,21 @@
 
 struct Position
 {
+    // Init everything with 0
+    Position();
+
+    //TODO implement -> is endian important here?
+    Position(unsigned char byte);
+    
+    Position(unsigned char ring, unsigned char rel_pos, unsigned char occupation, unsigned char last_moved);
+    
     /*
      * ring:       00 - outer, 01 - middle, 11 - inner
      * rel_pos:    0-7 as shown in board-struct-Comment
      * occupation: 00 - none, 01 - player1, 11 - player2
+     * last_moved 0 - no, 1 - yes
     */
-    unsigned char ring : 2, rel_pos : 4, occupation : 2;
+    unsigned char ring : 2, rel_pos : 3,occupation : 2, last_moved : 1;
 };
 
 class Board
@@ -40,16 +49,15 @@ private:
         fly_one = 2, //one player has only 3 stones
         fly_two = 3 // both player have 3 stones
     };
-public: //TODO: make private. currently public because of easy tests
     std::array<Position, 24> positions;
 
-    //TODO test
-    // Check if the given position is part of a mill
-    bool pos_is_mill(Position pos) const;
 
-private:
+    //////////////////////
+    // private functions /
+    //////////////////////
+
     // calculates the array-location of the Position value
-    inline unsigned char get_array_pos(const Position& pos) const noexcept;
+    static inline unsigned char get_array_pos(const Position& pos)  noexcept;
 
 public:
     // Creates a board with non-occupied positions
@@ -58,20 +66,43 @@ public:
     // Creates a board with the given positions-array
     // The positions may not be ill-formed and should be created using Board::get_new_position_array()
     Board(const std::array<Position, 24>& positions);    
-    // Getter
+    
+    ///////////
+    // getter /
+    ///////////
 
-    // Copies the current occupation into to the given object
+    // Returns the currently stored array -> gamestate
+    std::array<Position, 24> get_array_copy() const noexcept;
+
+    // Copies the current occupation into the given object
     void get_occupation_at(Position& pos) const noexcept;
+    
+    //TODO test
+    // Returns the last edited Position -> last-moved = 1
+    // If there's no such value will return a Position with occupation = 0
+    Position get_last_moved() const noexcept;
 
     // returns an initialized non-occupied positions-array
     static std::array<Position,24> get_new_position_array();
 
-    // Setter
+    //TODO test    
+    //checks if the given position is part of a mill
+    bool pos_is_mill(Position pos) const;
+    
+    ///////////
+    // setter /
+    ///////////
 
     // Sets the current occupation to the value of the given object
     void set_occupation_at(Position pos) noexcept;
+    
+    //TODO
+    // "move a piece" - may toggle a mill
+    void set();
 
-    // Ouput functions
+    ////////////////////
+    // ouput functions /
+    ////////////////////
 
     // Prints every position in list-form
     void print_list();

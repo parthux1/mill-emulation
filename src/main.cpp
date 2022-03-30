@@ -9,6 +9,6 @@ int main()
 {
     std::cout << "executing\n";
     tests::size_check();
-    tests::mill_detection(5, true);
+    tests::mill_detection(1, true);
     return 0;
 }

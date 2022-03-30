@@ -14,25 +14,25 @@ namespace tests
 
     // Generate a random board
     // TODO
-    Board random_board() noexcept;
+    Board random_board(unsigned char min_amount = 0) noexcept;
 
     const std::array<const Position, 12> mill_min_positions = {
         // 1 in ring 0, 1 , 2
-        0b00000100,
-        0b01000100,
-        0b11000100,
+        Position(0, 1, 0, 0),
+        {1, 1, 0, 0},
+        {2, 1, 0, 0},
         // 3 in ring 0, 1, 2
-        0b00001100,
-        0b01001100,
-        0b11001100,
-        // 5 in ring 0, 1, 2
-        0b00010100,
-        0b01010100,
-        0b11010100,
+        {0, 3, 0, 0},
+        {1, 3, 0, 0},
+        {2, 3, 0, 0},
+        // 5 in ring 0, 1, 2p
+        {0, 5, 0, 0},
+        {1, 5, 0, 0},
+        {2, 5, 0, 0},
         // 7 in ring 0, 1, 2
-        0b00011100,
-        0b01011100,
-        0b11011100
+        {0, 7, 0, 0},
+        {1, 7, 0, 0},
+        {2, 7, 0, 0}
         };
 
     //
