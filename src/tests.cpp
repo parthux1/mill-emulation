@@ -50,7 +50,7 @@ void tests::mill_detection(unsigned int amount, bool verbose) {
             b.get_occupation_at(pos);
             if(pos.occupation != 0) flag = b.pos_is_mill(pos);
 
-            if(flag && verbose) std::cout << "Ring<" << (int)pos.ring << ">Rel_Pos<" << (int)pos.rel_pos << "> is part of a mill\n";
+            if(flag && verbose) std::cout << (int)pos.ring << "." << (int)pos.rel_pos << " is part of a mill\n";
         }
     }
 }
