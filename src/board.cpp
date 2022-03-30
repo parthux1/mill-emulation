@@ -2,22 +2,13 @@
 
 Board::Board()
 {
-    // Init all 24 stones
-    Position p_default;
-    p_default.occupation = 0;
+    positions = Board::get_new_position_array();
+}
 
-    // Ring iteration
-    for(unsigned char i = 0; i < 3; i++)
-    {
-        p_default.ring = i;
+Board::Board(const std::array<Position, 24>& positions)
+    : positions(positions)
+{
 
-        // relative_pos iteration
-        for(unsigned char j = 0; j < 8; j++)
-        {
-            p_default.rel_pos = j;
-            positions[i*8+j] = p_default;
-        }
-    }
 }
 
 
@@ -64,6 +55,49 @@ bool Board::pos_is_mill(Position pos) const
     return (positions[(pos.ring*8)+prev].occupation == positions[(pos.ring*8)+prevprev].occupation == positions[array_index].occupation);
 }
 
+// getter
+
+inline unsigned char Board::get_array_pos(const Position& pos) const noexcept
+{
+    return pos.ring*8+pos.rel_pos;
+}
+
+void Board::get_occupation_at(Position& pos) const noexcept
+{
+    pos.occupation = positions[get_array_pos(pos)].occupation;
+}
+
+std::array<Position, 24> Board::get_new_position_array()
+{
+    std::array<Position, 24> ret_array;
+
+    // Init all 24 stones
+    Position p_default;
+    p_default.occupation = 0;
+
+    // Ring iteration
+    for(unsigned char i = 0; i < 3; i++)
+    {
+        p_default.ring = i;
+
+        // relative_pos iteration
+        for(unsigned char j = 0; j < 8; j++)
+        {
+            p_default.rel_pos = j;
+            ret_array[i*8+j] = p_default;
+        }
+    }
+
+    return ret_array;
+}
+
+// setter
+void Board::set_occupation_at(Position pos) noexcept
+{
+    positions[get_array_pos(pos)].occupation = pos.occupation;
+}
+
+// Output functions
 
 void Board::print_list()
 {

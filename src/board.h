@@ -47,12 +47,35 @@ public: //TODO: make private. currently public because of easy tests
     // Check if the given position is part of a mill
     bool pos_is_mill(Position pos) const;
 
+private:
+    // calculates the array-location of the Position value
+    inline unsigned char get_array_pos(const Position& pos) const noexcept;
+
 public:
+    // Creates a board with non-occupied positions
     Board();
+
+    // Creates a board with the given positions-array
+    // The positions may not be ill-formed and should be created using Board::get_new_position_array()
+    Board(const std::array<Position, 24>& positions);    
+    // Getter
+
+    // Copies the current occupation into to the given object
+    void get_occupation_at(Position& pos) const noexcept;
+
+    // returns an initialized non-occupied positions-array
+    static std::array<Position,24> get_new_position_array();
+
+    // Setter
+
+    // Sets the current occupation to the value of the given object
+    void set_occupation_at(Position pos) noexcept;
+
+    // Ouput functions
 
     // Prints every position in list-form
     void print_list();
-
+    
     // Displays the board as a string (X.X)
     void print_board();
 };
