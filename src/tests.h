@@ -1,4 +1,7 @@
 #pragma once
+
+#include <stdlib.h> // for rand
+#include <time.h> // seed for srand
 #include "board.h"
 
 
@@ -37,7 +40,6 @@ namespace tests
     //
 
     // test different boards for mills
-    // TODO
     void mill_detection(unsigned int amount, bool verbose);
 
     // Prints the sizes of all custom types
