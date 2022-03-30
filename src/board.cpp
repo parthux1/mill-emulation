@@ -39,9 +39,13 @@ bool Board::pos_is_mill(Position pos) const
     // (1)
     if(pos.rel_pos % 2 == 1)
     {
-
         // check 1 - in the array the pieces are 8 apart
-        if(compare_occ == positions[pos.rel_pos+8].occupation && compare_occ ==  positions[pos.rel_pos+16].occupation) return true;
+#if DEBUG_BOARD_MILLCHECK_VERBOSE
+        // Debug output
+        std::cout << "[verbose millcheck] rel_pos:" << pos.rel_pos << "|ring0:\n";
+#endif
+
+        if(positions[pos.rel_pos].occupation == positions[pos.rel_pos+8].occupation && positions[pos.rel_pos].occupation ==  positions[pos.rel_pos+16].occupation) return true;
 
         // check 2 - one below, one above
         // this won't be oob, because the value is odd.

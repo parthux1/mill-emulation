@@ -39,7 +39,9 @@ namespace tests
     // Test suites
     //
 
-    // test different boards for mills
+    // test (reandom, if verbose) boards for mills
+    // currently only implemented for verbose==true
+    // TODO: implement silent, real tests
     void mill_detection(unsigned int amount, bool verbose);
 
     // Prints the sizes of all custom types

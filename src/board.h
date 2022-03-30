@@ -5,6 +5,10 @@
 #include <string>
 
 
+#ifndef DEBUG_BOARD_MILLCHECK_VERBOSE
+#define DEBUG_BOARD_MILLCHECK_VERBOSE false
+#endif
+
 /*Board structure
  *0-----1-----2
  *|     |     |
@@ -67,7 +71,6 @@ public:
     // returns an initialized non-occupied positions-array
     static std::array<Position,24> get_new_position_array();
 
-    //TODO test    
     //checks if the given position is part of a mill
     bool pos_is_mill(Position pos) const;
     

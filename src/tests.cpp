@@ -45,12 +45,13 @@ void tests::mill_detection(unsigned int amount, bool verbose) {
             b.print_board();
         }
         bool flag = false;
-        for(Position pos : tests::mill_min_positions)
+        for(Position pos : b.get_array_copy())
         {
             b.get_occupation_at(pos);
             if(pos.occupation != 0) flag = b.pos_is_mill(pos);
 
-            if(flag && verbose) std::cout << (int)pos.ring << "." << (int)pos.rel_pos << " is part of a mill\n";
+            if(flag && verbose)std::cout << (int)pos.ring << "." << (int)pos.rel_pos << " is part of a mill\n";
+            flag = false;
         }
     }
 }
