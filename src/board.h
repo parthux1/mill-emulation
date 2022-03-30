@@ -1,4 +1,5 @@
 #pragma once
+#include "position.h"
 #include <array>
 #include <iostream>
 #include <string>
@@ -19,25 +20,6 @@
  *|     |     |
  *6-----5-----4
 */
-
-struct Position
-{
-    // Init everything with 0
-    Position();
-
-    //TODO implement -> is endian important here?
-    Position(unsigned char byte);
-    
-    Position(unsigned char ring, unsigned char rel_pos, unsigned char occupation, unsigned char last_moved);
-    
-    /*
-     * ring:       00 - outer, 01 - middle, 11 - inner
-     * rel_pos:    0-7 as shown in board-struct-Comment
-     * occupation: 00 - none, 01 - player1, 11 - player2
-     * last_moved 0 - no, 1 - yes
-    */
-    unsigned char ring : 2, rel_pos : 3,occupation : 2, last_moved : 1;
-};
 
 class Board
 {
