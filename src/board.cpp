@@ -16,6 +16,9 @@ Board::Board(const std::array<Position, 24>& positions)
 }
 
 Board::Board(const Board&)
+{
+    //TODO
+}
 
 bool Board::pos_is_mill(Position pos) const
 {
