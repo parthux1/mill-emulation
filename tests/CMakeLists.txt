@@ -3,13 +3,13 @@ cmake_minimum_required(VERSION 3.10)
 project(tests-mill-emulation)
 
 set(PROJECT_HEADER
-    board.h
-    position.h
+    ../src/board.h
+    ../src/position.h
     tests_board.h)
 
 set(PROJECT_SOURCE
-    board.cpp
-    position.cpp
+    ../src/board.cpp
+    ../src/position.cpp
     tests_board.cpp
     tests_main.cpp)
 
