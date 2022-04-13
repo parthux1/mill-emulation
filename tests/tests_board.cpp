@@ -1,11 +1,18 @@
-#include "tests.h"
+#include "tests_board.h"
 
-bool tests::board_is_legal(const Board& b) noexcept
+void tests_board::run_all()
+{
+    mill_detection(1, false);
+    size_check();
+    edit_check();
+}
+
+bool tests_board::board_is_legal(const Board& b) noexcept
 {
     return false;
 }
 
-Board tests::random_board(unsigned char min_amount) noexcept
+Board tests_board::random_board(unsigned char min_amount) noexcept
 {
     srand(time(0));
 
@@ -31,12 +38,12 @@ Board tests::random_board(unsigned char min_amount) noexcept
 // Test-suites
 //
 
-void tests::mill_detection(unsigned int amount, bool verbose) {
-    std::cout << "[TEST] Starting " << amount << " mill_detection_tests\n";
+void tests_board::mill_detection(unsigned int amount, bool verbose) {
+    std::cout << "[TEST] Starting " << amount << " mill_detection_tests_board\n";
     for(unsigned int run = 0; run < amount; run++)
     {
         // Generate Board
-        Board b = tests::random_board(10);
+        Board b = tests_board::random_board(10);
         // check for mills
         
         if(verbose)
@@ -56,14 +63,14 @@ void tests::mill_detection(unsigned int amount, bool verbose) {
     }
 }
 
-void tests::size_check()
+void tests_board::size_check()
 {
     std::cout << "[TEST] size_check()\n";
     std::cout << "Position size: " << sizeof(Position) << '\n';
     std::cout << "Board size   : " << sizeof(Board) << '\n';
 }
 
-void tests::edit_check()
+void tests_board::edit_check()
 {
     Board b;
 
@@ -92,7 +99,7 @@ void tests::edit_check()
 
     if(run_success != test_amount)
     {
-        std::cout << "[        ] failed tests:\n";
+        std::cout << "[        ] failed tests_board:\n";
         for(auto[board, pos] : run_error)
         {
             std::cout << "[FAILED  ] Position " << (int) pos.ring << '.' << (int) pos.rel_pos << " occupation: " << (int) pos.occupation << "\n";

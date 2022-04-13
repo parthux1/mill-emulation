@@ -4,11 +4,13 @@
 #include <time.h> // seed for srand
 #include <vector> // for saving fails
 #include <utility> // pair
-#include "board.h"
+#include "../src/board.h"
 
 
-namespace tests
+namespace tests_board
 {
+    // run all tests in this namespace
+    void run_all();
 
     // Test if a board is possible
     // TODO: check amount of occupations 2 or more mills -> there must be less occupations
@@ -20,7 +22,7 @@ namespace tests
 
     const std::array<const Position, 12> mill_min_positions = {
         // 1 in ring 0, 1 , 2
-        Position(0, 1, 0, 0),
+        Position{0, 1, 0, 0},
         {1, 1, 0, 0},
         {2, 1, 0, 0},
         // 3 in ring 0, 1, 2
