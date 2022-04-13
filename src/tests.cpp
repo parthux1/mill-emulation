@@ -27,9 +27,9 @@ Board tests::random_board(unsigned char min_amount) noexcept
     return Board(positions);
 }
 
-
+//
 // Test-suites
-
+//
 
 void tests::mill_detection(unsigned int amount, bool verbose) {
     std::cout << "[TEST] Starting " << amount << " mill_detection_tests\n";
@@ -61,4 +61,46 @@ void tests::size_check()
     std::cout << "[TEST] size_check()\n";
     std::cout << "Position size: " << sizeof(Position) << '\n';
     std::cout << "Board size   : " << sizeof(Board) << '\n';
+}
+
+void tests::edit_check()
+{
+    Board b;
+
+    srand(time(0));
+
+    std::cout << "[TEST] edit_check()\n";
+
+    // check set_occupation_at
+    unsigned char test_amount = 10;
+    unsigned char run_success = 0;
+
+    const std::vector<std::pair<Board, Position>> run_error;
+
+    for(unsigned char run = 0; run < test_amount; run++)
+    {
+       Position p{rand()%3, rand()%8, rand()%2, 0};
+       b.set_occupation_at(p, false);
+
+        // Save state if test fails
+        if(b.get_occupation_at(p) == p.occupation) run_success++;
+        else run_error.push_back(std::make_pair<Board, Position>(b, p));
+    }
+
+    // Output
+    std::cout << "[TEST_RES] set_occupation_at [" << (int) run_success << "/" << test_amount << "]\n";
+
+    if(run_success != test_amount)
+    {
+        std::cout << "[        ] failed tests:\n";
+        for(auto[board, pos] : run_error)
+        {
+            std::cout << "[FAILED  ] Position " << (int) pos.ring << '.' << (int) pos.rel_pos << " occupation: " << (int) pos.occupation << "\n";
+            std::cout << "[FAILED] Boadstate:\n";
+            board.print_board();
+        }
+    }
+
+    // check get_last_moved
+    std::cout << "[TEST_RES] get_last_moved: not implemented (edit_check())\n";
 }

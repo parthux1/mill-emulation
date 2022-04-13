@@ -2,6 +2,8 @@
 
 #include <stdlib.h> // for rand
 #include <time.h> // seed for srand
+#include <vector> // for saving fails
+#include <utility> // pair
 #include "board.h"
 
 
@@ -46,4 +48,8 @@ namespace tests
 
     // Prints the sizes of all custom types
     void size_check();
+
+    // Edit board with given functions
+    // checked functions: set_occupation_at, get_last_moved
+    void edit_check();
 }

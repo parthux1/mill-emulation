@@ -52,7 +52,10 @@ public:
     // Creates a board with the given positions-array
     // The positions may not be ill-formed and should be created using Board::get_new_position_array()
     Board(const std::array<Position, 24>& positions);    
-    
+   
+    // For easy copying
+    Board(const Board& b);
+
     ///////////
     // getter /
     ///////////
@@ -60,8 +63,8 @@ public:
     // Returns the currently stored array -> gamestate
     std::array<Position, 24> get_array_copy() const noexcept;
 
-    // Copies the current occupation into the given object
-    void get_occupation_at(Position& pos) const noexcept;
+    // Returns the current occupation on the given positiob
+    unsigned char get_occupation_at(const Position& pos) const noexcept;
     
     //TODO test
     // Returns the last edited Position -> last-moved = 1
@@ -78,12 +81,10 @@ public:
     // setter /
     ///////////
 
+    //TODO: test
     // Sets the current occupation to the value of the given object
-    void set_occupation_at(Position pos) noexcept;
+    void set_occupation_at(Position pos, bool count_as_moved = true) noexcept;
     
-    //TODO
-    // "move a piece" - may toggle a mill
-    void set();
 
     ////////////////////
     // ouput functions /

@@ -15,6 +15,8 @@ Board::Board(const std::array<Position, 24>& positions)
 
 }
 
+Board::Board(const Board&)
+
 bool Board::pos_is_mill(Position pos) const
 {
     /*
@@ -40,16 +42,11 @@ bool Board::pos_is_mill(Position pos) const
     if(pos.rel_pos % 2 == 1)
     {
         // check 1 - in the array the pieces are 8 apart
-#if DEBUG_BOARD_MILLCHECK_VERBOSE
-        // Debug output
-        std::cout << "[verbose millcheck] rel_pos:" << pos.rel_pos << "|ring0:\n";
-#endif
-
         if(positions[pos.rel_pos].occupation == positions[pos.rel_pos+8].occupation && positions[pos.rel_pos].occupation ==  positions[pos.rel_pos+16].occupation) return true;
 
         // check 2 - one below, one above
         // this won't be oob, because the value is odd.
-        //TODO in (2) check1 & 2 we navigate using get_array_pos(). use this here too?
+        // TODO in (2) check1 & 2 we navigate using get_array_pos(). use this here too?
         return (compare_occ == positions[array_index-1].occupation && compare_occ == positions[array_index+1].occupation);
     }
 
@@ -91,9 +88,9 @@ inline unsigned char Board::get_array_pos(const Position& pos) noexcept
     return pos.ring*8+pos.rel_pos;
 }
 
-void Board::get_occupation_at(Position& pos) const noexcept
+unsigned char  Board::get_occupation_at(const Position& pos) const noexcept
 {
-    pos.occupation = positions[get_array_pos(pos)].occupation;
+    return positions[get_array_pos(pos)].occupation;
 }
 
 Position Board::get_last_moved() const noexcept
@@ -138,9 +135,26 @@ std::array<Position, 24> Board::get_new_position_array()
 // setter /
 ///////////
 
-void Board::set_occupation_at(Position pos) noexcept
+void Board::set_occupation_at(Position pos, bool count_as_moved) noexcept
 {
-    positions[get_array_pos(pos)].occupation = pos.occupation;
+    Position& edit_pos = positions[get_array_pos(pos)];
+    edit_pos.occupation = pos.occupation;
+    
+    if(count_as_moved)
+    {
+        // remove existing last_moved
+        for(Position& pos : positions)
+        {
+            if(pos.last_moved)
+            {
+                pos.last_moved = false;
+                break;
+            }
+        }
+
+        edit_pos.last_moved = true;
+    }
+    
 }
 
 /////////////////////
