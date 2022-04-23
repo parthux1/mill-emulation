@@ -4,11 +4,6 @@
 #include <iostream>
 #include <string>
 
-
-#ifndef DEBUG_BOARD_MILLCHECK_VERBOSE
-#define DEBUG_BOARD_MILLCHECK_VERBOSE false
-#endif
-
 /*Board structure
  *0-----1-----2
  *|     |     |
@@ -28,13 +23,30 @@
 class Board
 {
 private:
+
+    // represents the current gamestate
+    // TODO: implement as flag system so multiple states are possible. Usefull for adding turn-information and placement_count for place_stones
     enum State
     {
         place_stones = 0,
         move = 1,
-        fly_one = 2, //one player has only 3 stones
-        fly_two = 3 // both player have 3 stones
+        fly_one = 2, // player one has only 3 stones
+        fly_two = 3, // player two has only 3 stones
+        fly_both = 4, // both players have 3 stones
+        winner_one = 5, // player one won the game
+        winner_two = 6 // player two won the game
     };
+
+    // Feedback for move_ functions so the player knows what happened
+    enum Feedback
+    {
+        success,
+        fail, 
+        mill
+    };
+
+    State gamestate;
+
     std::array<Position, 24> positions;
 
 
@@ -44,6 +56,8 @@ private:
 
     // calculates the array-location of the Position value
     static inline unsigned char get_array_pos(const Position& pos)  noexcept;
+
+    void update_state() noexcept;
 
 public:
     // Creates a board with non-occupied positions
@@ -77,6 +91,9 @@ public:
     //checks if the given position is part of a mill
     bool pos_is_mill(Position pos) const;
     
+    // Returns the current gamestate of the board
+    State get_gamestate() const noexcept;
+
     ///////////
     // setter /
     ///////////
@@ -86,6 +103,14 @@ public:
     void set_occupation_at(Position pos, bool count_as_moved = true) noexcept;
     
 
+    // TODO: test
+    // tries to move a pice
+    // \param pos_start: The starting position. only ring and rel_pos are needed
+    // \param pos_target: The target position. only ring and rel_pos are needed
+    // \param player_id: 0 for player 1, 1 for player 2. Used for giving feedback
+    // \return Feedback, see enum for more information
+    Board::Feedback move_piece(Position pos_start, Position pos_target, bool player_id) noexcept;
+    
     ////////////////////
     // ouput functions /
     ////////////////////
