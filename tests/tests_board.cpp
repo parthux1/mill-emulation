@@ -66,8 +66,8 @@ void tests_board::mill_detection(unsigned int amount, bool verbose) {
 void tests_board::size_check()
 {
     std::cout << "[TEST] size_check()\n";
-    std::cout << "Position size: " << sizeof(Position) << '\n';
-    std::cout << "Board size   : " << sizeof(Board) << '\n';
+    std::cout << "[INFO] Position size: " << sizeof(Position) << '\n';
+    std::cout << "[INFO] Board size   : " << sizeof(Board) << '\n';
 }
 
 void tests_board::edit_check()
@@ -82,7 +82,7 @@ void tests_board::edit_check()
     unsigned char test_amount = 10;
     unsigned char run_success = 0;
 
-    const std::vector<std::pair<Board, Position>> run_error;
+    std::vector<std::pair<Board, Position>> run_error;
 
     for(unsigned char run = 0; run < test_amount; run++)
     {
@@ -91,18 +91,18 @@ void tests_board::edit_check()
 
         // Save state if test fails
         if(b.get_occupation_at(p) == p.occupation) run_success++;
-        else run_error.push_back(std::make_pair<Board, Position>(b, p));
+        else run_error.push_back(std::make_pair(b, p));
     }
 
     // Output
-    std::cout << "[TEST_RES] set_occupation_at [" << (int) run_success << "/" << test_amount << "]\n";
+    std::cout << "[TEST_RES] set_occupation_at [" << (int)run_success << "/" << (int)test_amount << "]\n";
 
     if(run_success != test_amount)
     {
         std::cout << "[        ] failed tests_board:\n";
         for(auto[board, pos] : run_error)
         {
-            std::cout << "[FAILED  ] Position " << (int) pos.ring << '.' << (int) pos.rel_pos << " occupation: " << (int) pos.occupation << "\n";
+            std::cout << "[FAILED  ] Position " << (int)pos.ring << '.' << (int)pos.rel_pos << " occupation: " << (int)pos.occupation << "\n";
             std::cout << "[FAILED] Boadstate:\n";
             board.print_board();
         }
