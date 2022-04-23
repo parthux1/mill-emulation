@@ -4,11 +4,13 @@ project(mill-emulation)
 
 set(PROJECT_HEADER
     board.h
-    position.h)
+    position.h
+    bruteforce.h)
 
 set(PROJECT_SOURCE
     main.cpp
     board.cpp
-    position.cpp)
+    position.cpp
+    bruteforce.cpp)
 
 add_executable(mill-emulation ${PROJECT_SOURCE})
